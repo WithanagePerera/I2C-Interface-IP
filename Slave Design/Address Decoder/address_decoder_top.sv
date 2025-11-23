@@ -4,8 +4,6 @@
 
 // Top-level file that implements the structural architecture of the address decoder
 
-import address_decoder_states::*;
-
 module address_decoder_top (
     input logic FPGA_clk,
     input logic SCL,
@@ -39,7 +37,7 @@ address_decoder_controller controller (
     .bit_count_rst(bit_count_rst)
 );
 
-counter bit_counter (
+counter #(.WIDTH(3)) bit_counter (
     .FPGA_clk(FPGA_clk),
     .enable(bit_count_enable),
     .rst(rst || bit_count_rst),

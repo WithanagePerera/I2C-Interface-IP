@@ -6,11 +6,11 @@
 
 package address_decoder_states;
 
-typedef enum bit {
+    typedef enum bit {
 
-    IDLE        = 1'b0, // Waits for rising edge SCL
-    COMPARISON  = 1'b1  // Compares the SDA bit against the current I2C Address bit
+        IDLE        = 1'b0, // Waits for rising edge SCL
+        COMPARISON  = 1'b1  // Compares the SDA bit against the current I2C Address bit
 
-} address_states;
+    } address_states;
 
 endpackage

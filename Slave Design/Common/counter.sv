@@ -4,15 +4,18 @@
 
 // Generic counter implementation. I'll use it to count which bit of the I2C address I should be comparing the current SDA bit against.
 
-module counter (
+module counter #(
+    parameter int WIDTH
+)
+(
     input logic FPGA_clk,
     input logic enable,
     input logic rst,
 
-    output logic [2:0] count
+    output logic [WIDTH-1:0] count
 );
 
-    logic [2:0] next_count_r;
+    logic [WIDTH-1:0] next_count_r;
 
     // Updating count
     always_ff @(posedge FPGA_clk or posedge rst) begin
