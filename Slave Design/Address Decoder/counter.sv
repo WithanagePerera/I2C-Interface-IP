@@ -2,6 +2,8 @@
 // November 2025
 // I2C Interface IP Project
 
+// Generic counter implementation. I'll use it to count which bit of the I2C address I should be comparing the current SDA bit against.
+
 module counter (
     input logic FPGA_clk,
     input logic enable,

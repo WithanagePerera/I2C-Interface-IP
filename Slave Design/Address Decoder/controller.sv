@@ -2,6 +2,8 @@
 // November 2025
 // I2C Interface IP Project
 
+// Controller for the Address Decoder
+
 import address_decoder_states::*;
 
 module address_decoder_controller (
