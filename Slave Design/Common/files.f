@@ -1,2 +1,0 @@
-counter.sv
-counter_tb.sv
