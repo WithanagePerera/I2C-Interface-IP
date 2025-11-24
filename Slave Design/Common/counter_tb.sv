@@ -9,10 +9,10 @@
 
 module counter_tb;
 
-    localparam int COUNTER_WIDTH = 8;
+    localparam int COUNTER_WIDTH = 4;
 
     logic clk, enable, rst;
-    logic count [COUNTER_WIDTH-1:0];
+    logic [COUNTER_WIDTH-1:0] count;
 
     // Entity instantiation
     counter #(.WIDTH(COUNTER_WIDTH)) DUT (
@@ -43,7 +43,7 @@ module counter_tb;
         repeat (2) @(posedge clk);
         rst = 1'b0;
         
-        for (int i = 0; i < 20; i++) begin
+        for (int i = 0; i < 30; i++) begin
             // Waiting for positive edges
             @(posedge clk);
             
@@ -53,7 +53,13 @@ module counter_tb;
                 enable <= 1'b0;
             else
                 enable <= 1'b1;
+
+	    $display("Enable=%0d Rst=%0d Count=%0d", enable, rst, count);
         end
+
+	#20;
+	$display("Testbench completed!");
+	$finish;
     end
 
 endmodule
