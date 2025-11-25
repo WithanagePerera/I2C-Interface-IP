@@ -17,9 +17,8 @@ module address_decoder_top (
     output logic selected
 );
 
-logic [2:0] bit_count = '0;
-logic bit_count_enable = 1'b0;
-logic bit_count_rst = 1'b0;
+logic [2:0] bit_count;
+logic bit_count_enable;
 
 address_decoder_controller controller (
     .FPGA_clk(FPGA_clk),
@@ -33,14 +32,13 @@ address_decoder_controller controller (
 
     .done(done),
     .selected(selected),
-    .bit_count_enable(bit_count_enable),
-    .bit_count_rst(bit_count_rst)
+    .bit_count_enable(bit_count_enable)
 );
 
 counter #(.WIDTH(3)) bit_counter (
     .FPGA_clk(FPGA_clk),
     .enable(bit_count_enable),
-    .rst(rst || bit_count_rst),
+    .rst(rst),
 
     .count(bit_count)
 );

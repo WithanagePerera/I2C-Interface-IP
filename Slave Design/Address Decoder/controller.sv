@@ -18,8 +18,7 @@ module address_decoder_controller (
 
     output logic done,
     output logic selected,
-    output logic bit_count_enable,
-    output logic bit_count_rst
+    output logic bit_count_enable
 );
 
     // State variables
@@ -36,6 +35,12 @@ module address_decoder_controller (
 
     // Next state logic + conditional outputs
     always_comb begin
+
+        next_state_r <= IDLE;
+
+        done <= 1'b0;
+        selected <= 1'b0;
+        bit_count_enable <= 1'b0;
 
         case (current_state_r)
 
@@ -57,7 +62,6 @@ module address_decoder_controller (
                     // We're on the last address bit that we need to compare
                     if (bit_count == 3'd6) begin
 
-                        bit_count_rst <= 1'b1;
                         selected <= 1'b1;
                         done <= 1'b1;
                         
@@ -69,17 +73,7 @@ module address_decoder_controller (
 
             end
 
-            default: begin
-               
-                next_state_r <= IDLE;
-
-                done <= 1'b0;
-                selected <= 1'b0;
-                bit_count_enable <= 1'b0;
-                bit_count_rst <= 1'b0;
-                
-            end
-
+            default: ;
         endcase
     end
 
