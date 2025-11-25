@@ -14,10 +14,10 @@ module data_in_tb;
 
     logic clk, SCL, SCL_prev, SDA, SDA_prev, enable, rst;
     logic done, SDA_down;
-    logic [NUM_BYTES:0] HEX_out [3:0];
+    logic [3:0] HEX_out [NUM_BYTES-1:0];
 
     // The data that I'm going to transmit
-    logic [NUM_BYTES:0] data_to_send [7:0];
+    logic [7:0] data_to_send [NUM_BYTES-1:0];
 
     // Now I want to initialize the unpacked matrix with some data
     initial begin
@@ -42,7 +42,6 @@ module data_in_tb;
     initial begin
         clk = 1'b0;
         SCL = 1'b0;
-        SDA = 1'b0;
         enable = 1'b1;
         rst = 1'b1;
     end
@@ -94,8 +93,8 @@ module data_in_tb;
             end
 
             // Setting the acknowledge bit
-            @(negedge SCL);
-            SDA_down = 1'b1;
+            // @(negedge SCL);
+            // SDA_down = 1'b1;
 
             // Setting stop condition
             @(negedge SCL);
@@ -107,7 +106,7 @@ module data_in_tb;
 
             // After each byte, let's check that the data decoder processed it correctly by looking at the HEX outputs
             if (HEX_out[x] != data_to_send[x][3:0])
-                $display("[%t] ERROR: Nibble does not match for Byte=%0d, Sent=%b but Received=%b", $time, x, HEX_out[x], data_to_send[x][3:0]);
+                $display("[%0t] ERROR: Nibble does not match for Byte=%0d, Sent=%b but Received=%b", $time, x, data_to_send[x][3:0], HEX_out[x]);
         end
 
         $display("Testbench completed!");

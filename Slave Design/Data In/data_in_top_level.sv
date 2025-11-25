@@ -18,14 +18,15 @@ module data_in_top_level #(
 
     output logic done,
     output logic SDA_down,
-    output logic [NUM_BYTES-1:0] HEX_out [3:0]
+    output logic [3:0] HEX_out [NUM_BYTES-1:0]
 );
 
-    logic byte_count, bit_count;
+    logic [$clog2(NUM_BYTES):0] byte_count; 
+    logic [2:0] bit_count;
     logic byte_en, bit_en;
     logic byte_rst, bit_rst;
 
-    logic [NUM_BYTES-1:0] received_data [7:0];
+    logic [7:0] received_data [NUM_BYTES-1:0];
 
     data_in_controller #(.NUM_BYTES(NUM_BYTES)) controller (
         .FPGA_clk(FPGA_clk),
@@ -50,15 +51,15 @@ module data_in_top_level #(
     // I need to map received data to our HEX outputs now.
     // This isn't a great approach since I'm hardcoding the indices, but I allowed for parameters.
     // I'll have to fix that in the future.
-    assign HEX_out[0] = received_data[5][3:0];
-    assign HEX_out[1] = received_data[4][3:0];
-    assign HEX_out[2] = received_data[3][3:0];
-    assign HEX_out[3] = received_data[2][3:0];
-    assign HEX_out[4] = received_data[1][3:0];
-    assign HEX_out[5] = received_data[0][3:0];
+    assign HEX_out[0] = received_data[0][3:0];
+    assign HEX_out[1] = received_data[1][3:0];
+    assign HEX_out[2] = received_data[2][3:0];
+    assign HEX_out[3] = received_data[3][3:0];
+    assign HEX_out[4] = received_data[4][3:0];
+    assign HEX_out[5] = received_data[5][3:0];
 
     // Keeps track of which byte we're on
-    counter #(.WIDTH(NUM_BYTES)) byte_counter (
+    counter #(.WIDTH($clog2(NUM_BYTES)+1)) byte_counter (
         .FPGA_clk(FPGA_clk),
         .enable(byte_en),
         .rst(byte_rst || rst),
@@ -67,7 +68,7 @@ module data_in_top_level #(
     );
 
     // Keeps track of which bit we're on
-    counter #(.WIDTH(8)) bit_counter (
+    counter #(.WIDTH(3)) bit_counter (
         .FPGA_clk(FPGA_clk),
         .enable(bit_en),
         .rst(bit_rst || rst),
