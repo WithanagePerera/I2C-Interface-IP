@@ -32,15 +32,18 @@ module data_in_controller #(
     states current_state_r, next_state_r;
 
     // I need an internal set of registers/RAM for storing the data we receive
-    logic [NUM_BYTES-1:0] received_data_r [7:0] = '0;
+    logic [NUM_BYTES-1:0] received_data_r [7:0];
 
     // Updating states
     always_ff @(posedge FPGA_clk or posedge rst) begin
 
         if (rst == 1'b1) begin
             current_state_r <= IDLE;
-            received_data <= '0;
-            received_data_r <= '0;
+
+            for (int x = 0; x < NUM_BYTES; x++) begin
+                received_data[x] <= '0;
+            end
+            
         end else begin
             current_state_r <= next_state_r;
             received_data <= received_data_r;
@@ -121,6 +124,11 @@ module data_in_controller #(
                 SDA_down <= 1'b0;
             end
         endcase
+
+        if (rst == 1'b1)
+            for (int x = 0; x < NUM_BYTES; x++) begin
+                received_data_r[x] <= '0;
+            end
 
     end
 

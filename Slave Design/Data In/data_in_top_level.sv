@@ -21,7 +21,8 @@ module data_in_top_level #(
     output logic [NUM_BYTES-1:0] HEX_out [3:0]
 );
 
-    logic byte_count, bit_count;
+    logic [$clog2(NUM_BYTES):0] byte_count; 
+    logic [2:0] bit_count;
     logic byte_en, bit_en;
     logic byte_rst, bit_rst;
 
@@ -58,7 +59,7 @@ module data_in_top_level #(
     assign HEX_out[5] = received_data[0][3:0];
 
     // Keeps track of which byte we're on
-    counter #(.WIDTH(NUM_BYTES)) byte_counter (
+    counter #(.WIDTH($clog2(NUM_BYTES)+1)) byte_counter (
         .FPGA_clk(FPGA_clk),
         .enable(byte_en),
         .rst(byte_rst || rst),
@@ -67,7 +68,7 @@ module data_in_top_level #(
     );
 
     // Keeps track of which bit we're on
-    counter #(.WIDTH(8)) bit_counter (
+    counter #(.WIDTH(3)) bit_counter (
         .FPGA_clk(FPGA_clk),
         .enable(bit_en),
         .rst(bit_rst || rst),
